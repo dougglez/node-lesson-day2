@@ -8,14 +8,34 @@ const USERS = require('./fakeDB/users'),
       MOVIES = require('./fakeDB/movies.json'),
       PORT = 3000;
 
-
-APP.get('/api/users', function(request, response) {
-  response.status(200).send(USERS);
+// Object.keys(obj to check) returns array of names of keys in an object
+APP.get('/api/users', function(req, res) {
+  let key = Object.keys(req.query)[0];
+  if (key) {
+    for (let i = 0; i < USERS.length; i++) {
+      if (req.query[key].toLowerCase() === USERS[i][key].toString().toLowerCase()) {
+        var user = USERS[i];
+      }
+    }
+    res.status(200).send(user);
+  } else {
+    res.status(200).send(USERS);
+  }
 });
 
-APP.get('/api/movies', function(request, response) {
-  response.status(200).send(MOVIES);
+APP.get('/api/movies', function(req, res) {
+  if (Object.keys(req.query)[0]) {
+    for (let i = 0; i < MOVIES.length; i++) {
+      if (req.query.title.toLowerCase() === MOVIES[i].title.toLowerCase()) {
+        var movie = MOVIES[i];
+      }
+    }
+    res.status(200).send(movie);
+  } else {
+    res.status(200).send(MOVIES);
+  }
 });
+
 
 //get with params
 APP.get('/api/users/:fave', function(req, res) {
@@ -37,14 +57,6 @@ APP.get('/api/movies/:title', function(req, res) {
 });
 
 
-
-//get with query
-APP.get('/api/users/q', function(req, res) {
-
-});
-APP.get('/api/movies/q', function(req, res) {
-
-});
 
 
 
